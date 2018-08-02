@@ -1,0 +1,15 @@
+namespace SecondMTAProject.db;
+
+context cds {
+
+    /*@@layout{"layoutInfo":{"x":-8,"y":-135.5}}*/
+    entity world {
+        key continent : String(100);
+    };
+
+    /*@@layout{"layoutInfo":{"x":-347,"y":-137.5}}*/
+    entity country {
+        key name   : String(100);
+            partof : association[0..1] to cds.world { continent };
+    };
+};

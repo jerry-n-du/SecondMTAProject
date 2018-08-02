@@ -1,0 +1,32 @@
+PROCEDURE "SecondMTAProject.db::createCountry"(
+		IN im_country NVARCHAR(100), im_continent NVARCHAR(100),
+		OUT error_message NVARCHAR(100)
+	)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER AS
+   --DEFAULT SCHEMA <default_schema_name>
+   --READS SQL DATA AS
+BEGIN
+   /*************************************
+       Write your procedure logic 
+   *************************************/
+   declare noc integer;
+   
+   select count(*) into noc
+   from "SecondMTAProject.db::cds.world"
+   where "continent" = im_continent;
+   
+   if :noc = 0 then
+     error_message := 'ERROR: Continent ' || :im_continent || ' doe not exit!';
+   else
+     select count(*) into noc
+     from "SecondMTAProject.db::cds.country"
+     where "name" = im_country;
+     if :noc = 0 then
+       insert into "SecondMTAProject.db::cds.country" values (im_country, im_continent);
+     else
+       error_message := 'ERROR: Country ' || :im_country || ' already exits!';
+     end if;
+   end if;
+   
+END
